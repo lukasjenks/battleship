@@ -1,0 +1,7 @@
+*.o
+battleship_client
+battleship_server
+srv_socket
+cli_socket_*
+battleship_server.log
+.vscode
