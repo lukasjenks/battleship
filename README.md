@@ -2,8 +2,16 @@
 
 ### Description
 
-This project is under development; it's a battleship server/client C program
-that can be used by different users on a shared Unix system on the terminal
+This project is under development; it currently is fully functional but
+limited to play on the same unix system as it uses Unix sockets for it's
+IPC; development is now being done on converting it to working through TCP/IP
+sockets, so that it can be played across separate systems.
+
+It consists of a multithreaded server program which handles connections
+and commands from multiple client programs, and can handle these client
+connections simultaneously.
+
+It can be used by different users on a shared Unix system on the terminal
 to play a version of multiplayer battleship. Players take turns
 firing at the next person in the chain of players like so:
 
