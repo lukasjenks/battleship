@@ -20,15 +20,23 @@ A -> B -> C -> D -> A -> B -> C (etc.)
 **Compiling And Testing Instructions:**
 
 **System Prerequisites**
+
 This program is intended to be run on a Linux system.
 It was developed and tested on the following:
 
+
 OS: Arch Linux x86_64
+
 Kernel: 5.10.15-arch1-1
+
 Shell: bash 5.1.4
+
 Thread model: posix
+
 gcc version 10.2.0
+
 GNU Make 4.3
+
 
 **Testing Instructions**
 To test, run:
@@ -36,7 +44,9 @@ To test, run:
    `make all`
    `make test`
 
+
 **Explanation of Test**
+
 `make clean`
 - This will cleanup all executable, object, etc. files generated during compilation,
   if make all and make test have already been executed previously.
