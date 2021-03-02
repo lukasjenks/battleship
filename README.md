@@ -1,6 +1,6 @@
 # BattleShip
 
-### Description
+## Description
 
 This project is under development; it currently is fully functional but
 limited to play on the same unix system as it uses Unix sockets for it's
@@ -17,7 +17,7 @@ firing at the next person in the chain of players like so:
 
 A -> B -> C -> D -> A -> B -> C (etc.)
 
-**Compiling And Testing Instructions:**
+## Compiling And Testing Instructions:**
 
 **System Prerequisites**
 
@@ -39,9 +39,13 @@ GNU Make 4.3
 
 
 **Testing Instructions**
+
 To test, run:
+
    `make clean`
+
    `make all`
+
    `make test`
 
 
@@ -115,14 +119,13 @@ To test, run:
 
   For an example of what the output of `make test` should look like, please see
   the file make_test_output.txt.
-  **If it doesn't look like this, the program hasn't been compiled/tested properly.**
 
-Misc Notes:
+  **If it doesn't look like this, the program hasn't been compiled/tested properly.**
 
    battleship_server uses the socket path "./srv_socket" for the server socket, and
    battleship_client uses the socket path "./cli_socket_[unique identifier]" for the client socket.
 
-Notes on Development:
+## Notes on Development:
 
    To achieve synchronization using multiple threads initialized by multiple client connections,
    which the master node is capable of handling simultaneously, I created a while loop in my main

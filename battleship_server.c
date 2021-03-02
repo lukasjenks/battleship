@@ -309,8 +309,8 @@ int main(void)
 	// Open log file for logging
 	log_file = fopen("battleship_server.log", "a+");	// a+ (create + append) option will allow appending which is useful in a log file
 	if (log_file == NULL) {
-	  fprintf(stderr, "There was an error opening the log file.\n");
-	  exit(1);
+		fprintf(stderr, "There was an error opening the log file.\n");
+		exit(1);
 	}
 	// Initialize server socket
 	srv = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -322,10 +322,10 @@ int main(void)
 	// Bind socket to ./srv_socket
 	unlink("./srv_socket");	// unlink if still bound to previous server call
 	if (bind(srv, (struct sockaddr *)&srvaddr, size) != 0) {
-	  fprintf(log_file,
-		  "%s\t: => Error binding server socket. Exiting with non-zero exit status 1.",
-		  getTime());
-	  exit(1);
+		fprintf(log_file,
+			"%s\t: => Error binding server socket. Exiting with non-zero exit status 1.",
+			getTime());
+		exit(1);
 	}
 	// Listen on the ./srv_socket socket
 	listen(srv, 100);
@@ -338,30 +338,30 @@ int main(void)
 	// Infinite loop, will keep running unless encounter sigint or sighup
 	while (1) {
 
-	  // Connect with requesting client
-	  cli = accept(srv, (struct sockaddr *)&cliaddr, &size);
+		// Connect with requesting client
+		cli = accept(srv, (struct sockaddr *)&cliaddr, &size);
 
-	  pthread_mutex_lock(&srv_cli_lock);
+		pthread_mutex_lock(&srv_cli_lock);
 
-	  // Package information needed by the handle_client thread
-	  // worker function into a struct that it can accept as an
-	  // argument
-	  sock_info *package = malloc(sizeof *package);
-	  int srv_copy = srv;
-	  int cli_copy = cli;
-	  package->srv = &srv_copy;
-	  package->cli = &cli_copy;
-	  package->client_identifier = malloc(5);
-	  // last 4 chars of cli socket path is the unique client identifier
-	  package->client_identifier =
-	    cliaddr.sun_path + strlen(cliaddr.sun_path) - 4;
-	  // Create new thread and init it @ handle_client to handle the
-	  // incoming client
-	  pthread_mutex_lock(&thread_lock);
-	  pthread_create(&threads[num_threads], NULL,
-			 handle_client, package);
-	  num_threads++;
-	  pthread_mutex_unlock(&thread_lock);
+		// Package information needed by the handle_client thread
+		// worker function into a struct that it can accept as an
+		// argument
+		sock_info *package = malloc(sizeof *package);
+		int srv_copy = srv;
+		int cli_copy = cli;
+		package->srv = &srv_copy;
+		package->cli = &cli_copy;
+		package->client_identifier = malloc(5);
+		// last 4 chars of cli socket path is the unique client identifier
+		package->client_identifier =
+		    cliaddr.sun_path + strlen(cliaddr.sun_path) - 4;
+		// Create new thread and init it @ handle_client to handle the
+		// incoming client
+		pthread_mutex_lock(&thread_lock);
+		pthread_create(&threads[num_threads], NULL,
+			       handle_client, package);
+		num_threads++;
+		pthread_mutex_unlock(&thread_lock);
 	}
 	fclose(log_file);
 	return 0;
