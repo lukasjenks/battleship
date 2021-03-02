@@ -17,7 +17,7 @@ firing at the next person in the chain of players like so:
 
 A -> B -> C -> D -> A -> B -> C (etc.)
 
-## Compiling And Testing Instructions:**
+## Compiling And Testing Instructions:
 
 **System Prerequisites**
 
