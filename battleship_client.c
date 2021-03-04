@@ -10,24 +10,40 @@
 #include <signal.h>
 #include <pthread.h>
 
+void getXAndY(char *bbuffer, char *xVal, char *yVal) {
+	int offset = 8 - strlen(xVal);
+	int i = 0;
+	for (i = 0; i < offset; i++) {
+		strcat(bbuffer, "0");
+	}
+	strcat(bbuffer, xVal);
+	offset = 8 - strlen(yVal);
+	i = 0;
+	for (i = 0; i < offset; i++) {
+		strcat(bbuffer, "0");
+	}
+	strcat(bbuffer, yVal);
+}
+
 int main(int argc, char **argv)
 {
 	// Values used for parsing and interpreting cmdline args
-	int iflag = 0;
-	int jflag = 0;
-	int bflag = 0;
-	int xflag = 0;
-	int yflag = 0;
+	int iFlag=0, jFlag=0, bFlag=0, xFlag=0, yFlag=0;
+	// Result of getopt
 	int o;
+	// Socket int pointer
 	int cli;
+	// Result of calls to socket function, tested for errors
 	int testval;
-	int offset;
 	int size;
-	char path[19] = "./cli_socket_";	//unique client identifier will be
-	//concatenated to this value
+	// Unique client identifier will be concatenated to this value
+	char path[19] = "./cli_socket_";
+	// 4 capital letters representing unique identifier for the client/player
 	char *identifier = NULL;
-	char *xval = NULL;
-	char *yval = NULL;
+	// X and Y cmdline args
+	char *xVal = NULL;
+	char *yVal = NULL;
+	// Bounded buffer to be sent to server socket
 	char bbuffer[21];	//4 byte JOIN/BOMB/STAT + 8 byte number + 8 byte number
 	// + null terminator
 	struct sockaddr_un srvaddr;
@@ -53,26 +69,26 @@ int main(int argc, char **argv)
 
 		switch (o) {
 		case 'i':
-			iflag = 1;
+			iFlag = 1;
 			identifier = optarg;
 			break;
 
 		case 'j':
-			jflag = 1;
+			jFlag = 1;
 			break;
 
 		case 'b':
-			bflag = 1;
+			bFlag = 1;
 			break;
 
 		case 'x':
-			xflag = 1;
-			xval = optarg;
+			xFlag = 1;
+			xVal = optarg;
 			break;
 
 		case 'y':
-			yflag = 1;
-			yval = optarg;
+			yFlag = 1;
+			yVal = optarg;
 			break;
 
 			// Stretch goal: Add s flag and optarg to specify server path
@@ -91,15 +107,15 @@ int main(int argc, char **argv)
 		}
 	}			// end of while loop to parse cmdline args
 
-	if (!iflag) {
+	if (!iFlag) {
 		fprintf(stderr,
 			"Error: must specify your unique identifier with -i flag and \
 			optarg\n");
-	} else if (jflag && bflag) {
+	} else if (jFlag && bFlag) {
 		fprintf(stderr,
 			"Error: cannot use both -j and -b simultaneously\n");
 		return 1;
-	} else if (bflag && (!xflag || !yflag)) {
+	} else if (bFlag && (!xFlag || !yFlag)) {
 		fprintf(stderr,
 			"Error: cannot use -b without specifying both the -x and -y \
 			argument and their optargs\n");
@@ -138,23 +154,12 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	// Send data to server
-	if (jflag == 1) {
+	if (jFlag == 1) {
 		strcpy(bbuffer, "JOIN");
 
 		// Check if optional x and y solution for joining player was specified
-		if (xval != NULL && yval != NULL) {
-			offset = 8 - strlen(xval);
-			int i = 0;
-			for (i = 0; i < offset; i++) {
-				strcat(bbuffer, "0");
-			}
-			strcat(bbuffer, xval);
-			offset = 8 - strlen(yval);
-			i = 0;
-			for (i = 0; i < offset; i++) {
-				strcat(bbuffer, "0");
-			}
-			strcat(bbuffer, yval);
+		if (xVal != NULL && yVal != NULL) {
+			getXAndY(bbuffer, xVal, yVal);
 
 		// If optional x and y solution for joining player wasn't specified, set to 0.
 		// server will then assign player a random solution.
@@ -165,24 +170,12 @@ int main(int argc, char **argv)
 			}
 		}
 
-	} else if (bflag == 1) {
+	} else if (bFlag == 1) {
 		strcpy(bbuffer, "BOMB");
 
 		// convert command line arg numbers
 		// to a 8 bit number
-		offset = 8 - strlen(xval);
-		int i = 0;
-		for (i = 0; i < offset; i++) {
-			strcat(bbuffer, "0");
-		}
-		strcat(bbuffer, xval);
-
-		offset = 8 - strlen(yval);
-		i = 0;
-		for (i = 0; i < offset; i++) {
-			strcat(bbuffer, "0");
-		}
-		strcat(bbuffer, yval);
+		getXAndY(bbuffer, xVal, yVal);
 	}
 	// Send request to server
 	testval = send(cli, bbuffer, strlen(bbuffer), 0);

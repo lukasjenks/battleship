@@ -270,11 +270,9 @@ int main(void)
 {
 
 	socklen_t size;
-	int srv;
-	int cli;
+	int srv, cli;
 
-	struct sockaddr_un srvaddr;
-	struct sockaddr_un cliaddr;
+	struct sockaddr_un srvaddr, cliaddr;
 
 	int num_threads = 0;
 	pthread_t threads[1024];
@@ -363,6 +361,4 @@ int main(void)
 		num_threads++;
 		pthread_mutex_unlock(&thread_lock);
 	}
-	fclose(log_file);
-	return 0;
 }
