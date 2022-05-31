@@ -2,12 +2,11 @@
 
 ## Description
 
-This project is under development; it started as a hobby project I wrote
-one weekend and has been mostly untouched since, though I have plans to
-improve it in the near future. Currently is fully functional but
-limited to play on the same unix system as it uses Unix sockets for it's
-IPC; development is now being done on converting it to working through TCP/IP
-sockets, so that it can be played across separate systems.
+This project is a hobby project I wrote one weekend and has been mostly 
+untouched since, though I have plans to improve it eventually. Currently 
+is fully functional but limited to play on the same unix system as it uses 
+Unix sockets for it's IPC; future development would focus on converting it 
+to working through TCP/IP sockets, so that it can be played across separate systems.
 
 It consists of a multithreaded server program which handles connections
 and commands from multiple client programs, and can handle these client
